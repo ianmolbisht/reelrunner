@@ -1,0 +1,12 @@
+# Virtual env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Media files (recommended)
+*.mp4
+*.mp3
