@@ -1,0 +1,6 @@
+dotenv
+edge_tts
+numpy
+instagrapi
+faster_whisper
+google-genai
