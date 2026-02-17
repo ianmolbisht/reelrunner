@@ -24,22 +24,31 @@ chosen_video = random.choice(videos)
 print("Using video:", chosen_video)
 
 video = VideoFileClip(chosen_video)
-# Resize & crop to 9:16
-video = video.resize(height=1280)
 
-if video.w > 720:
-    x_center = video.w / 2
-    video = video.crop(
-        x_center=x_center,
-        width=720,
-        height=1280
-    )
+# Target Reel size
+TARGET_W = 720
+TARGET_H = 1280
+
+# Scale just enough
+scale = max(TARGET_W/video.w, TARGET_H/video.h)
+video = video.resize(scale)
+
+# Then crop center
+video = video.crop(
+    x_center=video.w/2,
+    y_center=video.h/2,
+    width=TARGET_W,
+    height=TARGET_H
+)
+
 
 # -----------------------
 # LOAD AUDIO
 # -----------------------
 
 audio = AudioFileClip("voice.mp3")
+
+# Loop video to match audio
 video = video.loop(duration=audio.duration).set_audio(audio)
 
 # -----------------------
@@ -63,7 +72,6 @@ def get_color(word):
 # -----------------------
 
 def text_img(text):
-
     W,H = 520,150
     img = Image.new("RGBA",(W,H),(0,0,0,0))
     draw = ImageDraw.Draw(img)
@@ -85,8 +93,9 @@ def text_img(text):
     x=(W-w)//2
     y=(H-h)//2
 
-    for dx in range(-4,5):
-        for dy in range(-4,5):
+    # outline
+    for dx in range(-3,4):
+        for dy in range(-3,4):
             draw.text((x+dx,y+dy),text,font=font,fill="black")
 
     draw.text((x,y),text,font=font,fill=color)
@@ -98,7 +107,6 @@ def text_img(text):
 # -----------------------
 
 def word_clip(word,start,end):
-
     img = text_img(word.upper())
     dur = end-start
 
@@ -106,42 +114,40 @@ def word_clip(word,start,end):
         ImageClip(img)
         .set_start(start)
         .set_duration(dur)
-
-        # CENTER POSITION
-        .set_position(("center", 0.5), relative=True)
-
-        .resize(lambda t: 1 + 0.35*np.exp(-6*t))
+        .set_position(("center",0.75), relative=True)  # lower captions
+        .resize(lambda t: 1 + 0.25*np.exp(-5*t))
         .fadein(0.05)
         .fadeout(0.05)
     )
-
-
 
 # -----------------------
 # LOAD TIMESTAMPS
 # -----------------------
 
-lines = open("timestamps.txt",encoding="utf-8").read().splitlines()
-
 subs=[]
 
+with open("timestamps.txt",encoding="utf-8") as f:
+    lines = f.read().splitlines()
+
 for line in lines:
-    s,e,w=line.split("|")
-    s,e=float(s),float(e)
-    subs.append(word_clip(w,s,e))
+    s,e,w = line.split("|")
+    subs.append(word_clip(w,float(s),float(e)))
 
 # -----------------------
 # FINAL
 # -----------------------
 
-final=CompositeVideoClip([video]+subs)
+final = CompositeVideoClip([video] + subs)
 
 final.write_videofile(
-    "whisper_reel_v2.mp4",
-    fps=24,
+    "final_reel.mp4",
+    fps=30,
     codec="libx264",
-    preset="ultrafast",
-    audio_codec="aac"
+    preset="slow",        # better compression quality
+    bitrate="8000k",      # big quality boost
+    audio_codec="aac",
+    audio_bitrate="192k"
 )
 
-print("✅ Done! Random background reel ready.")
+
+print("\n✅ Reel created: final_reel.mp4")
