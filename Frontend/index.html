@@ -1,12 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ReelRunner Frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReelRunner</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="title">ReelRunner</h1>
+
+    <label for="keywordInput">ENTER KEYWORDS</label>
+
+    <div class="keyword-box">
+        <input 
+            type="text"
+            id="keywordInput"
+            name="keywordInput"
+            placeholder="Type keyword and press Enter"
+            onkeydown="handleKeyword(event)"
+        >
+    </div>
+
+    <div id="keywordTags" class="tags"></div>
+
+    <label for="theme">THEME</label>
+
+    <select id="theme" name="theme">
+        <option value="">SELECT</option>
+        <option value="Documentary">Documentary</option>
+        <option value="Education">Education</option>
+        <option value="Motivation">Motivation</option>
+        <option value="Storytelling">Storytelling</option>
+        <option value="Travel">Travel</option>
+    </select>
+
+    <label for="duration">DURATION (SEC)</label>
+
+    <div class="counter">
+        <button type="button" onclick="changeValue('duration', -5)">-</button>
+        <input type="number" id="duration" name="duration" value="30" min="5">
+        <button type="button" onclick="changeValue('duration', 5)">+</button>
+    </div>
+
+    <label for="reels">NUMBER OF REELS</label>
+
+    <div class="counter">
+        <button type="button" onclick="changeValue('reels', -1)">-</button>
+        <input type="number" id="reels" name="reels" value="1" min="1">
+        <button type="button" onclick="changeValue('reels', 1)">+</button>
+    </div>
+
+    <button class="generate-btn" type="button" onclick="generateReels()">
+        ✨ Generate Reels
+    </button>
+
+    <pre id="responseBox"></pre>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
 </html>
