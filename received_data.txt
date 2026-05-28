@@ -1,7 +1,6 @@
-
-----------------------------------------Received Parameters from Frontend:
-Keywords: ['story', 'emotion', 'journey']
-Theme: Storytelling
+Received Parameters from Frontend:
+Keywords: ['learning', 'facts', 'tips']
+Theme: Education
 Duration: 30
 Number of Reels: 1
 ----------------------------------------
@@ -9,5 +8,5 @@ Received Parameters from Frontend:
 Keywords: ['adventure', 'nature', 'explore']
 Theme: Travel
 Duration: 30
-Number of Reels: 3
+Number of Reels: 1
 ----------------------------------------

@@ -10,3 +10,4 @@ __pycache__/
 # Media files (recommended)
 *.mp4
 *.mp3
+node_modules/

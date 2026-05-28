@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+import os
 app = Flask(__name__)
 CORS(app)
 
@@ -8,14 +8,15 @@ CORS(app)
 def generate():
 
     data = request.get_json()
-
+    print("🔥 Incoming data:", data)
     keywords = data.get("keywords")
     theme = data.get("theme")
     duration = data.get("duration")
     num_reels = data.get("num_reels")
 
     # Write parameters to a separate file
-    with open("received_data.txt", "a") as file:
+    file_path = os.path.join(os.path.dirname(__file__), "received_data.txt")
+    with open(file_path, "a") as file:
         file.write("Received Parameters from Frontend:\n")
         file.write(f"Keywords: {keywords}\n")
         file.write(f"Theme: {theme}\n")

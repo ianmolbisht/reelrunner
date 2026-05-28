@@ -1,131 +1,66 @@
 let keywords = [];
 
-/* Handle keyword input */
-
-function handleKeyword(event) {
-
-let input = document.getElementById("keywordInput");
-let value = input.value.trim();
-
-/* ENTER → add keyword */
-
-if (event.key === "Enter") {
-
-event.preventDefault();
-
-if (value === "") return;
-
-keywords.push(value);
-
-renderTags();
-
-input.value = "";
-
+// scroll
+function scrollToThemes() {
+    document.getElementById("themes").scrollIntoView({ behavior: "smooth" });
 }
 
-/* BACKSPACE → remove last keyword */
+// theme select
+function selectTheme(themeName, presetKeywords) {
+    document.getElementById("theme").value = themeName;
 
-if (event.key === "Backspace" && value === "") {
-
-keywords.pop();
-
-renderTags();
-
+    keywords = presetKeywords;
+    renderTags();
 }
 
+// keyword input
+function handleKeyword(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        const input = e.target.value.trim();
+
+        if (input && !keywords.includes(input)) {
+            keywords.push(input);
+            renderTags();
+        }
+
+        e.target.value = "";
+    }
 }
-
-
-/* Render keyword tags */
 
 function renderTags() {
+    const tagBox = document.getElementById("keywordTags");
+    tagBox.innerHTML = "";
 
-let container = document.getElementById("keywordTags");
-
-container.innerHTML = "";
-
-keywords.forEach((tag, index) => {
-
-let div = document.createElement("div");
-
-div.className = "tag";
-
-div.innerHTML = `
-${tag} <span onclick="removeTag(${index})">✕</span>
-`;
-
-container.appendChild(div);
-
-});
-
+    keywords.forEach(k => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.innerText = k;
+        tagBox.appendChild(span);
+    });
 }
 
-
-/* Remove specific tag */
-
-function removeTag(index) {
-
-keywords.splice(index, 1);
-
-renderTags();
-
+// counter
+function changeValue(id, delta) {
+    const input = document.getElementById(id);
+    input.value = Math.max(input.min || 1, Number(input.value) + delta);
 }
 
+// API call
+async function generateReels() {
+    const data = {
+        keywords,
+        theme: document.getElementById("theme").value,
+        duration: document.getElementById("duration").value,
+        num_reels: document.getElementById("reels").value
+    };
 
-/* Counter controls */
+    const res = await fetch("http://127.0.0.1:8000/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
 
-function changeValue(id, val) {
-
-let input = document.getElementById(id);
-
-let num = parseInt(input.value);
-
-if (isNaN(num)) num = 0;
-
-num += val;
-
-if (num < 1) num = 1;
-
-input.value = num;
-
-}
-
-
-/* Send data to backend */
-
-async function generateReels(){
-
-let data = {
-
-keywords: keywords,
-theme: document.getElementById("theme").value,
-duration: parseInt(document.getElementById("duration").value),
-num_reels: parseInt(document.getElementById("reels").value)
-
-}
-
-try{
-
-let response = await fetch("http://localhost:8000/generate",{
-
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body: JSON.stringify(data)
-
-})
-
-let result = await response.json()
-
-console.log("Backend response:", result)
-
-}
-
-catch(error){
-
-console.log("Backend not running")
-
-}
-
+    const result = await res.json();
+    document.getElementById("responseBox").innerText = JSON.stringify(result, null, 2);
 }

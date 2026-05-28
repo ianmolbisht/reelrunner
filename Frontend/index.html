@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelRunner</title>
-
+    <title>REELRUN</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>REELRUN</h1>
+    <p>Turn ideas into viral reels instantly 🚀</p>
+    <button onclick="scrollToThemes()">Explore Themes ↓</button>
+</section>
 
-    <h1 class="title">ReelRunner</h1>
+<!-- THEME SECTION -->
+<section class="themes-section" id="themes">
 
-    <label for="keywordInput">ENTER KEYWORDS</label>
+    <h2>Select a Theme</h2>
+
+    <div class="card-container">
+
+        <div class="card" onclick="selectTheme('Motivation', ['success','discipline','mindset'])">
+            <h3>🔥 Motivation</h3>
+            <p>Success, hustle, mindset</p>
+        </div>
+
+        <div class="card" onclick="selectTheme('Travel', ['adventure','nature','explore'])">
+            <h3>🌍 Travel</h3>
+            <p>Adventure, nature, explore</p>
+        </div>
+
+        <div class="card" onclick="selectTheme('Education', ['learning','facts','tips'])">
+            <h3>📚 Education</h3>
+            <p>Facts, tips, knowledge</p>
+        </div>
+
+        <div class="card" onclick="selectTheme('Storytelling', ['story','emotion','journey'])">
+            <h3>🎬 Storytelling</h3>
+            <p>Emotions, stories</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MANUAL INPUT SECTION -->
+<section class="container">
+
+    <h2>Or Create Manually</h2>
+
+    <label>ENTER KEYWORDS</label>
 
     <div class="keyword-box">
         <input 
             type="text"
             id="keywordInput"
-            name="keywordInput"
             placeholder="Type keyword and press Enter"
             onkeydown="handleKeyword(event)"
         >
@@ -29,42 +65,31 @@
 
     <div id="keywordTags" class="tags"></div>
 
-    <label for="theme">THEME</label>
+    <label>THEME</label>
+    <input type="text" id="theme" placeholder="Auto-filled or type manually">
 
-    <select id="theme" name="theme">
-        <option value="">SELECT</option>
-        <option value="Documentary">Documentary</option>
-        <option value="Education">Education</option>
-        <option value="Motivation">Motivation</option>
-        <option value="Storytelling">Storytelling</option>
-        <option value="Travel">Travel</option>
-    </select>
-
-    <label for="duration">DURATION (SEC)</label>
-
+    <label>DURATION (SEC)</label>
     <div class="counter">
-        <button type="button" onclick="changeValue('duration', -5)">-</button>
-        <input type="number" id="duration" name="duration" value="30" min="5">
-        <button type="button" onclick="changeValue('duration', 5)">+</button>
+        <button onclick="changeValue('duration', -5)">-</button>
+        <input type="number" id="duration" value="30" min="5">
+        <button onclick="changeValue('duration', 5)">+</button>
     </div>
 
-    <label for="reels">NUMBER OF REELS</label>
-
+    <label>NUMBER OF REELS</label>
     <div class="counter">
-        <button type="button" onclick="changeValue('reels', -1)">-</button>
-        <input type="number" id="reels" name="reels" value="1" min="1">
-        <button type="button" onclick="changeValue('reels', 1)">+</button>
+        <button onclick="changeValue('reels', -1)">-</button>
+        <input type="number" id="reels" value="1" min="1">
+        <button onclick="changeValue('reels', 1)">+</button>
     </div>
 
-    <button class="generate-btn" type="button" onclick="generateReels()">
+    <button class="generate-btn" onclick="generateReels()">
         ✨ Generate Reels
     </button>
 
     <pre id="responseBox"></pre>
 
-</div>
+</section>
 
 <script src="script.js"></script>
-
 </body>
 </html>
